@@ -1,7 +1,5 @@
 import settings
 from maze import Maze
-from tasks import tasks
-from tasks.tasks import greetings
 from ui import events
 from ui import graphics
 
@@ -9,23 +7,29 @@ FPS = 60
 running = True
 clock = events.Clock()
 
-# Приветствие. Его нужно удалить
-greetings()
-
 while running:
     for event in events.get_event_queue():
-        if tasks.handle_event(event):
-            continue
         if event.type == events.QUIT:
-           running = False
+            running = False
         if event.type == events.MOUSEBUTTONDOWN:
             if event.button == 1:
-                Maze.add_mouse(event.pos[0], event.pos[1])
+                Maze.add_mouse(
+                    (event.pos[0] - settings.view_left_top[0]) / settings.tile_size[0],
+                    (event.pos[1] - settings.view_left_top[1]) / settings.tile_size[1]
+                )
+                if Maze.cheese is not None:
+                    Maze.mouse.goto_cheese(Maze.cheese.x, Maze.cheese.y)
+            if event.button == 3:
+                Maze.add_cheese(
+                    (event.pos[0] - settings.view_left_top[0]) // settings.tile_size[0] + 1 / 2,
+                    (event.pos[1] - settings.view_left_top[1]) // settings.tile_size[1] + 1 / 2
+                )
+                if Maze.mouse is not None:
+                    Maze.mouse.goto_cheese(Maze.cheese.x, Maze.cheese.y)
 
     graphics.fill("black")
     # рисуем лабиринт
     Maze.draw()
-    tasks.check_tasks()
     graphics.flip()
     clock.tick(FPS)
     # обновляем весь лабиринт
