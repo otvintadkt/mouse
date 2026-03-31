@@ -1,14 +1,20 @@
 import settings
+import ui.graphics
 from maze import Maze
 from ui import events
 from ui import graphics
+import random
 
 FPS = 60
 running = True
 clock = events.Clock()
 
+is_moving = False
+last_mouse_pos = [0, 0]
+
 while running:
     for event in events.get_event_queue():
+        # print(random.randint(1, 4))
         if event.type == events.QUIT:
             running = False
         if event.type == events.MOUSEBUTTONDOWN:
@@ -26,6 +32,22 @@ while running:
                 )
                 if Maze.mouse is not None:
                     Maze.mouse.goto_cheese(Maze.cheese.x, Maze.cheese.y)
+            if event.button == 2:
+                is_moving = True
+                last_mouse_pos = event.pos
+        elif event.type == events.MOUSEBUTTONUP and event.button == 2:
+            is_moving = False
+        elif event.type == events.MOUSEMOTION and is_moving:
+            settings.view_left_top[0] += event.pos[0] - last_mouse_pos[0]
+            settings.view_left_top[1] += event.pos[1] - last_mouse_pos[1]
+            last_mouse_pos = event.pos
+        elif event.type == events.MOUSEWHEEL:
+            coef = 1 + 0.1 * event.y
+            settings.tile_size[0] *= coef
+            settings.tile_size[1] *= coef
+            settings.size[0] *= coef
+            settings.size[1] *= coef
+            ui.graphics.load_image("images/wall.png")
 
     graphics.fill("black")
     # рисуем лабиринт

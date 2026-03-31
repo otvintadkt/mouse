@@ -34,4 +34,3 @@ def draw_circle(color, x, y, r):
                        ),
                        r * settings.tile_size[0])
     pass
-

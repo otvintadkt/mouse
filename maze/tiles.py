@@ -40,6 +40,7 @@ class Wall_tile(Tile):
         self.image = graphics.load_image("images/wall.png")
 
     def draw(self):
+        self.image = graphics.load_image("images/wall.png")
         graphics.draw_image(self.image, self.column, self.row)
 
 

@@ -1,6 +1,8 @@
+import maze.Maze
 from maze.generateMaze import get_maze
 from maze.mice import SmartMouse
 from maze import cheese as Cheese
+from maze.tiles import Room_tile
 
 mouse = None
 cheese = None
@@ -36,8 +38,9 @@ def update(delta_time):
 
 
 def add_mouse(x, y):
-    global mouse
-    mouse = SmartMouse(x, y)
+    if isinstance(get_tile(x, y), Room_tile):
+        global mouse
+        mouse = SmartMouse(x, y)
 
 def add_cheese(x, y):
     global cheese
