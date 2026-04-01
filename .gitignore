@@ -1,4 +1,5 @@
 .idea
 .venv
+.run
 __pycache__
 .git

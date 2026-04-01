@@ -1,8 +1,10 @@
+import maze.Maze
 import settings
 import ui.graphics
 from maze import Maze
 from ui import events
 from ui import graphics
+from maze.tiles import Wall_tile
 import random
 
 FPS = 60
@@ -32,7 +34,10 @@ while running:
                 )
                 if Maze.mouse is not None:
                     Maze.mouse.goto_cheese(Maze.cheese.x, Maze.cheese.y)
-            if event.button == 2:
+            if event.button == 2 and maze.Maze.get_tile(
+                    (event.pos[0] - settings.view_left_top[0]) / settings.tile_size[0],
+                    (event.pos[1] - settings.view_left_top[1]) / settings.tile_size[1]
+            ):
                 is_moving = True
                 last_mouse_pos = event.pos
         elif event.type == events.MOUSEBUTTONUP and event.button == 2:
